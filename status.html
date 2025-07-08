@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="title">Status</title>
+    $(if refresh-timeout)
+    <meta http-equiv="refresh" content="$(refresh-timeout-secs)">
+    $(endif)
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700&dispplay=swap" />
+    
+    <script language="JavaScript">
+
+        $(if advert-pending == 'yes')
+            var popup = '';
+            function focusAdvert() {
+            if (window.focus) popup.focus();
+            }
+            function openAdvert() {
+            popup = open('$(link-advert)', 'hotspot_advert', '');
+            setTimeout("focusAdvert()", 1000);
+            }
+        $(endif)
+            function openLogout() {
+            if (window.name != 'hotspot_status') return true;
+                open('$(link-logout)', 'hotspot_logout', 'toolbar=0,location=0,directories=0,status=0,menubars=0,resizable=1,width=280,height=250');
+            window.close();
+            return false;
+            }
+        
+        </script>
+</head>
+
+<body $(if advert-pending=='yes' ) onLoad="openAdvert()" $(endif)>
+    <div data-content='Welcome!' id='greeting'></div>
+    <div class="ucp" id='greetings'></div>
+    <div class="container-login">
+        <!-- <div class="sub-title">Guard</div> -->
+
+        <!-- check trial akun -->
+        $(if login-by == 'trial')
+        <div style="margin-top:20px; text-align: center; font-size: 12px ; color: white;">
+            <h3>Selamat datang</h3>
+        </div>
+        $(elif login-by != 'mac')
+        <div style="margin-top:20px; text-align: center; font-size: 12px; color: white;">
+            <h3 id="user">$(username)</h3>
+        </div>
+        $(endif)
+        <!-- check trial akun -->
+
+        <!-- menu item -->
+        <div class="menu-items">
+            <div class="row-items">
+                <div class="title"> Ip Address</div>
+                <div class="title"> $(ip)</div>
+            </div>
+            <div class="row-items">
+                <div class="title"> Mac Address</div>
+                <div class="title"> $(mac)</div>
+            </div>
+            <div class="row-items">
+                <div class="title"> Upload</div>
+                <div class="title"> $(bytes-in-nice)</div>
+            </div>
+            <div class="row-items">
+                <div class="title"> Download</div>
+                <div class="title"> $(bytes-out-nice)</div>
+            </div>
+            <div class="row-items">
+                <div class="title"> Connect</div>
+                <div class="title"> $(uptime)</div>
+            </div>
+            $(if remain-bytes-total)
+            <div class="row-items">
+                <div class="title"> Quota</div>
+                <div class="title"> $(remain-bytes-total-nice)</div>
+            </div>
+            $(endif)
+            $(if session-time-left)
+            <div class="row-items">
+                <div class="title">Time</div>
+                <div class="title"> $(session-time-left)</div>
+            </div>
+            $(endif)
+            $(if blocked == 'yes')
+            <div class="row-items">
+                <div class="title"> Status</div>
+                <div class="title"> adv required</div>
+            </div>
+            $(elif refresh-timeout)
+            <div class="row-items">
+                <div class="title"> Refresh</div>
+                <div class="title"> $(refresh-timeout)</div>
+            </div>
+            $(endif)
+            <div class="row-items">
+                <div class="title"> Expired</div>
+                <div class="title"><iframe id="exp" frameborder="0" scrolling="no" src="about:blank"
+                    style="height: 35px; margin: 0px 0px 0px 70px; overflow: hidden; padding-top: 10px;"></iframe></div>
+            </div>
+        </div>
+        <!-- menu item -->
+
+        <!-- logout form and button -->
+        <form action="$(link-logout)" name="logout" onSubmit="return openLogout()">
+            $(if login-by-mac != 'yes')
+
+            <button class="btnl" type="submit"><b>logout</b></button>
+            $(endif)
+
+        </form>
+        <!-- logout form and button -->
+        <div class="copy">
+            &copy; prima <script>document.write(new Date().getFullYear())</script>
+            </div>
+    </div>
+    
+    <script>
+        /*<![CDATA[*/ 
+       var now = new Date();
+       var hours = now.getHours();
+       
+       var greeting = [
+          {"waktu": "begadang",
+           "hr": hours >= 24 || hours <= 3
+         }, 
+         {"waktu":"subuh",
+           "hr": hours == 4
+         },  
+         {"waktu":"pagi",
+           "hr": hours >= 5 && hours <= 9
+         },
+           {"waktu":"siang",
+           "hr": hours >= 10 && hours <= 15
+         },
+         {"waktu":"sore",
+           "hr": hours >= 16 && hours <= 17
+         },
+         {"waktu":"malam",
+           "hr": hours >= 18 && hours <= 24
+         },
+       ];
+       
+       var message = document.getElementById("greeting");
+       message.className = greeting.find(el=>el.hr).waktu;
+       /*]]>*/
+       </script>
+       
+       <script>  
+           /*<![CDATA[*/
+           var greetElem = document.querySelector("#greetings"); 
+           var curHr = new Date().getHours(); 
+           var greetMes = ["Wow! Masih Begadang?", 
+           "Good Morning", 
+           "Good Afternoon", 
+           "Good Evening", 
+           "Good Night", 
+           "Belum Tidur ya?"]; 
+           let greetText = ""; if (curHr < 4) greetText = greetMes[0]; 
+           else if (curHr < 10) greetText = greetMes[1]; 
+           else if (curHr < 16) greetText = greetMes[2]; 
+           else if (curHr < 18) greetText = greetMes[3]; 
+           else if (curHr < 22) greetText = greetMes[4]; 
+           else greetText = greetMes[5]; 
+           greetElem.setAttribute('data-content', greetText);
+           /*]]>*/
+           </script> 
+    <!-- expired setup -->
+    <script type="text/javascript">
+        document.getElementById('title').innerHTML = window.location.hostname + " > status";
+    //get vaidity
+        var usr = document.getElementById('user').innerHTML
+        var url = "https://10.10.20.1/status/status.php?name="; // http://ip-server-mikhmon/mikhmonv2/status/status.php?name=
+        var SessionName = "Telunas Resorts"
+        var getvalid = url+usr+"&session="+SessionName
+        document.getElementById('exp').src = getvalid;
+            
+    </script>
+        <!-- expired setup -->
+    
+</body>
+
+</html>

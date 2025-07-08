@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="title">Wifi Name</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700&dispplay=swap" /> -->
+</head>
+
+<script>
+    var error = "$(error)";
+    if ((error == "user $(username) has reached uptime limit") || (error == "kode voucher/user $(username) bermasalah silahkan disconnect dan connect kembali")) {
+        window.location.href = "./expired.html";
+    }
+</script>
+<body>
+    $(if chap-id)
+    <form name="sendin" action="$(link-login-only)" method="post">
+        <input type="hidden" name="username" />
+        <input type="hidden" name="password" />
+        <input type="hidden" name="dst" value="$(link-orig)" />
+        <input type="hidden" name="popup" value="true" />
+    </form>
+
+    <script type="text/javascript" src="md5.js"></script>
+    <script type="text/javascript">
+        function doLogin() {
+            document.sendin.username.value = document.login.username.value;
+            document.sendin.password.value = hexMD5('$(chap-id)' + document.login.password.value +
+                '$(chap-challenge)');
+            document.sendin.submit();
+            return false;
+        }
+    </script>
+    $(endif)
+    <div data-content='Welcome!' id='greeting'></div>
+    <div class="ucp" id='greetings'></div>
+    <div class="container-login">
+        <!-- box info login -->
+        <div class="box" id="infologin">
+        </div>
+        <!-- box info login -->
+        $(if error)<div class="notice">$(error)</div>$(endif)
+        <form class="custom-fields" name="login" autocomplete="off" action="$(link-login-only)" method="post" $(if chap-id) onSubmit="return doLogin()" $(endif)>
+            <input type="hidden" name="dst" value="$(link-orig)" />
+            <input type="hidden" name="popup" value="true" />
+            <div class="username-field">
+                <input type="username" name="username" class="username-input" placeholder="username"
+                    value="$(username)" style="font-size: 20px; color: black;"/>
+            </div>
+            <div class="password-field">
+                <input name="password" placeholder="Password" class="password-input" type="hidden" />
+            </div>
+            <button class="btn" type="submit"><a>login</a></button>
+        </form>
+        <button class="btnq" onclick="window.location='https://laksa19.github.io/myqr';"><c>qr</c></button>
+        
+        <!-- options button -->
+<div class="btn-container">
+    <button class="btno" onclick="voucher();"><d>Voucher</d></button>
+    <button class="btno" onclick="member();"><d>Staff</d></button>
+</div>
+<!-- end options button -->
+<div class="copy">
+&copy;prima <script>document.write(new Date().getFullYear())</script>
+</div>
+<script>
+    /*<![CDATA[*/ 
+   var now = new Date();
+   var hours = now.getHours();
+   
+   var greeting = [
+      {"waktu": "begadang",
+       "hr": hours >= 24 || hours <= 3
+     }, 
+     {"waktu":"subuh",
+       "hr": hours == 4
+     },  
+     {"waktu":"pagi",
+       "hr": hours >= 5 && hours <= 9
+     },
+       {"waktu":"siang",
+       "hr": hours >= 10 && hours <= 15
+     },
+     {"waktu":"sore",
+       "hr": hours >= 16 && hours <= 17
+     },
+     {"waktu":"malam",
+       "hr": hours >= 18 && hours <= 24
+     },
+   ];
+   
+   var message = document.getElementById("greeting");
+   message.className = greeting.find(el=>el.hr).waktu;
+   /*]]>*/
+   </script>
+   
+   <script>  
+       /*<![CDATA[*/
+       var greetElem = document.querySelector("#greetings"); 
+       var curHr = new Date().getHours(); 
+       var greetMes = ["Wow! Masih Begadang?", 
+       "Good Morning", 
+       "Good Afternoon", 
+       "Good Evening", 
+       "Good Night", 
+       "Belum Tidur ya?"]; 
+       let greetText = ""; if (curHr < 4) greetText = greetMes[0]; 
+       else if (curHr < 10) greetText = greetMes[1]; 
+       else if (curHr < 16) greetText = greetMes[2]; 
+       else if (curHr < 18) greetText = greetMes[3]; 
+       else if (curHr < 22) greetText = greetMes[4]; 
+       else greetText = greetMes[5]; 
+       greetElem.setAttribute('data-content', greetText);
+       /*]]>*/
+       </script> 
+    <script type="text/javascript">
+        var hostname = window.location.hostname;
+        document.getElementById('title').innerHTML = hostname + " > login";
+
+        document.login.username.focus();
+
+        var infologin = document.getElementById('infologin');
+        infologin.innerHTML = "Masukkan Kode Voucher kemudian klik login.";
+
+        // login page 2 mode by Prima
+        var username = document.login.username;
+        var password = document.login.password;
+
+        username.placeholder = "Kode Voucher";
+
+        // set password = username
+        function setpass() {
+            var user = username.value
+            //user = user.toLowerCase();
+            username.value = user;
+            password.value = user;
+        }
+
+        username.onkeyup = setpass;
+
+        // change to voucher mode
+        function voucher() {
+            username.focus();
+            username.onkeyup = setpass;
+            username.placeholder = "Kode Voucher";
+            username.style = "font-size:20px";
+            password.type = "hidden";
+            infologin.innerHTML = "Masukkan Kode Voucher kemudian klik login.";
+        }
+
+        // change to staff mode
+        function member() {
+            username.focus();
+            username.onkeyup = "";
+            username.placeholder = "Username";
+            username.style = "font-size:20px;";
+            password.type = "password";
+            password.style = "font-size:20px;"
+            infologin.innerHTML = "Masukkan User dan Password kemudian klik login.";
+        }
+    </script>
+    
+</body>
+
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="title">Hotspot Staff Name| Logout</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700&dispplay=swap" />
+</head>
+
+<script language="JavaScript">
+
+    function openLogin() {
+	if (window.name != 'hotspot_logout') return true;
+	open('$(link-login)', '_blank', '');
+	window.close();
+	return false;
+    }
+
+</script>
+
+<body>
+    <div data-content='Welcome!' id='greeting'></div>
+    <div class="ucp" id='greetings'></div>
+    <div class="container-login">
+        <div class="sub-title"><br>Anda telah keluar dari hotspot<br></div>
+
+        <!-- menu item -->
+        <div class="menu-items">
+
+            <div class="row-items">
+                <div class="title"> Ip Address</div>
+                <div class="title"> $(ip)</div>
+            </div>
+            <div class="row-items">
+                <div class="title"> Mac Address</div>
+                <div class="title"> $(mac)</div>
+            </div>
+            <div class="row-items">
+                <div class="title"> Upload</div>
+                <div class="title"> $(bytes-in-nice)</div>
+            </div>
+            <div class="row-items">
+                <div class="title"> Download</div>
+                <div class="title"> $(bytes-out-nice)</div>
+            </div>
+            <div class="row-items">
+                <div class="title"> Connect</div>
+                <div class="title"> $(uptime)</div>
+            </div>
+            $(if remain-bytes-total)
+            <div class="row-items">
+                <div class="title"> Quota</div>
+                <div class="title"> $(remain-bytes-total-nice)</div>
+            </div>
+            $(endif)
+            $(if session-time-left)
+            <div class="row-items">
+                <div class="title">Time</div>
+                <div class="title"> $(session-time-left)</div>
+            </div>
+            $(endif)
+        </div>
+        <!-- menu item -->
+
+        <form action="$(link-login)" name="login" onSubmit="return openLogin()">
+            <button class="btn" type="submit"><a>login kembali</a></button>
+        </form>
+        <div class="copy">
+            &copy; prima <script>document.write(new Date().getFullYear())</script>
+            </div>
+    </div>
+    <script>
+        /*<![CDATA[*/ 
+       var now = new Date();
+       var hours = now.getHours();
+       
+       var greeting = [
+          {"waktu": "begadang",
+           "hr": hours >= 24 || hours <= 3
+         }, 
+         {"waktu":"subuh",
+           "hr": hours == 4
+         },  
+         {"waktu":"pagi",
+           "hr": hours >= 5 && hours <= 9
+         },
+           {"waktu":"siang",
+           "hr": hours >= 10 && hours <= 15
+         },
+         {"waktu":"sore",
+           "hr": hours >= 16 && hours <= 17
+         },
+         {"waktu":"malam",
+           "hr": hours >= 18 && hours <= 24
+         },
+       ];
+       
+       var message = document.getElementById("greeting");
+       message.className = greeting.find(el=>el.hr).waktu;
+       /*]]>*/
+       </script>
+       
+       <script>  
+           /*<![CDATA[*/
+           var greetElem = document.querySelector("#greetings"); 
+           var curHr = new Date().getHours(); 
+           var greetMes = ["Wow! Masih Begadang?", 
+           "Good Morning", 
+           "Good Afternoon", 
+           "Good Evening", 
+           "Good Night", 
+           "Belum Tidur ya?"]; 
+           let greetText = ""; if (curHr < 4) greetText = greetMes[0]; 
+           else if (curHr < 10) greetText = greetMes[1]; 
+           else if (curHr < 16) greetText = greetMes[2]; 
+           else if (curHr < 18) greetText = greetMes[3]; 
+           else if (curHr < 22) greetText = greetMes[4]; 
+           else greetText = greetMes[5]; 
+           greetElem.setAttribute('data-content', greetText);
+           /*]]>*/
+           </script> 
+</body>
+<script type="text/javascript">
+	document.getElementById('title').innerHTML = window.location.hostname + " > logout";
+</script>
+</html>
